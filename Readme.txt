@@ -1,6 +1,7 @@
 Login Application Control Flow
-Based on the folder structure, this is a Spring Boot application that implements JWT (JSON Web Token) authentication. Let me explain the control flow from when a user interacts with the login page to authentication completion:
-Authentication Flow
+This is a Spring Boot application that implements JWT (JSON Web Token) authentication. The control flow from when a user interacts with the login page to authentication completion:
+
+ Authentication Flow
 
 User Interaction:
 
