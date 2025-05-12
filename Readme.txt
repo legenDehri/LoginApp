@@ -1,22 +1,22 @@
-Login Application Control Flow
+# Login Application Control Flow
 Based on the folder structure, this is a Spring Boot application that implements JWT (JSON Web Token) authentication. Let me explain the control flow from when a user interacts with the login page to authentication completion:
 Authentication Flow
 
-User Interaction:
+## User Interaction:
 
 User navigates to index.html served from the static resources folder
 The page loads with styles from styles.css and JavaScript from login.js
 User enters credentials in the login form
 
 
-Authentication Request:
+## Authentication Request:
 
 The frontend JavaScript (login.js) captures the form submission
 It sends a POST request with the credentials to the backend API
 The request contains a LoginRequest DTO with username/email and password
 
 
-Server-Side Processing:
+### Server-Side Processing:
 a. Request Handling:
 
 Incoming requests first pass through JwtAuthenticationFilter
@@ -41,7 +41,7 @@ JwtConfig provides configuration for token expiration and secret key
 
 e. Response:
 
-AuthController returns a JwtResponse DTO containing:
+## AuthController returns a JwtResponse DTO containing:
 
 The generated JWT token
 User details like username, roles, etc.
@@ -49,7 +49,7 @@ User details like username, roles, etc.
 
 
 
-Post-Authentication:
+## Post-Authentication:
 
 Frontend stores the token (typically in localStorage)
 Subsequent requests include this token in Authorization header
@@ -57,7 +57,7 @@ JwtAuthenticationFilter validates tokens in future requests
 
 
 
-Registration Flow
+## Registration Flow
 
 User submits registration form with details captured in RegisterRequest DTO
 AuthController processes the registration request
@@ -66,9 +66,9 @@ If validation passes, the service creates a new User entity
 UserRepository saves the new user to the database
 Controller returns success response or redirects user to login
 
-Security Configuration
+## Security Configuration
 
-WebSecurityConfig defines:
+### WebSecurityConfig defines:
 
 Which endpoints require authentication
 Password encoding strategy
@@ -80,7 +80,7 @@ JwtAuthenticationEntryPoint handles unauthorized access attempts with appropriat
 
 Overall Application Structure
 
-MVC Pattern:
+## MVC Pattern:
 
 Models (User.java) define data structures
 Views (HTML/CSS/JS) provide the user interface
