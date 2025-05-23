@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shivam.LoginApp.dto.JwtResponse;
 import com.shivam.LoginApp.dto.LoginRequest;
 import com.shivam.LoginApp.dto.RegisterRequest;
+import com.shivam.LoginApp.dto.TokenRefreshRequest;
+import com.shivam.LoginApp.dto.TokenRefreshResponse;
+import com.shivam.LoginApp.exception.TokenRefreshException;
+import com.shivam.LoginApp.model.RefreshToken;
 import com.shivam.LoginApp.model.User;
 import com.shivam.LoginApp.security.JwtUtils;
+import com.shivam.LoginApp.service.RefreshTokenService;
 import com.shivam.LoginApp.service.UserService;
 
 import jakarta.validation.Valid;
@@ -38,6 +43,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+    
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     /**
      * Register a new user
@@ -79,14 +87,29 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
         
         // Get user details
-        com.shivam.LoginApp.model.User user = userService.findByUsername(loginRequest.getUsername()).orElseThrow();
-        
+        User user = userService.findByUsername(loginRequest.getUsername()).orElseThrow();
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         // Return JWT token and user details
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
+                refreshToken.getToken(),
                 user.getId(),
                 user.getUsername(),
                 user.getName(),
                 user.getAge()));
+    }
+    
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
 }

@@ -48,6 +48,23 @@ public class JwtUtils {
             .compact();
     }
 
+	/**
+	 * Generate a JWT token from username
+	 * 
+	 * @param username the username to include in the token
+	 * @return JWT token string
+	 */
+    
+    public String generateTokenFromUsername(String username) {
+    	SecretKey key = Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes());
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtConfig.getRefreshExpiration()))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
     /**
      * Extract username from JWT token
      * 

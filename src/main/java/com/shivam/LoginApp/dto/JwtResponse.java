@@ -7,19 +7,21 @@ package com.shivam.LoginApp.dto;
 public class JwtResponse {
     
     private String token;
+    private String refreshTokens;
     private String type = "Bearer";
     private Long id;
     private String username;
     private String name;
     private Integer age;
 
-    public JwtResponse(String token, Long id, String username, String name, Integer age) {
-        this.token = token;
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.age = age;
-    }
+	public JwtResponse(String token,  String refreshTokens, Long id, String username, String name, Integer age) {
+		this.token = token;
+		this.refreshTokens = refreshTokens;
+		this.id = id;
+		this.username = username;
+		this.name = name;
+		this.age = age;
+	}
 
     // Getters and Setters
     
@@ -27,7 +29,21 @@ public class JwtResponse {
         return token;
     }
 
-    public void setToken(String token) {
+    /**
+	 * @return the refreshTokens
+	 */
+	public String getRefreshTokens() {
+		return refreshTokens;
+	}
+
+	/**
+	 * @param refreshTokens the refreshTokens to set
+	 */
+	public void setRefreshTokens(String refreshTokens) {
+		this.refreshTokens = refreshTokens;
+	}
+
+	public void setToken(String token) {
         this.token = token;
     }
 

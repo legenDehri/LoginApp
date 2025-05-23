@@ -12,7 +12,22 @@ import org.springframework.context.annotation.Configuration;
 public class JwtConfig {
     private String secret;
     private long expiration;
-    private String header;
+    private long jwtRefreshExpirationMs;
+    /**
+	 * @return the refreshExpiration
+	 */
+	public long getRefreshExpiration() {
+		return jwtRefreshExpirationMs;
+	}
+
+	/**
+	 * @param refreshExpiration the refreshExpiration to set
+	 */
+	public void setRefreshExpiration(long refreshExpiration) {
+		this.jwtRefreshExpirationMs = refreshExpiration;
+	}
+
+	private String header;
     private String prefix;
 
     // Getters and setters
